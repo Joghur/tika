@@ -57,7 +57,11 @@ const PixiCanvas = () => {
         />
       ))}
       {/* <FieldItem4 position={succesStartPosition} /> */}
-      <FieldItem5 position={succesStartPosition} />
+      <FieldItem5
+        type={"element"}
+        element={"ball"}
+        position={succesStartPosition}
+      />
       <FieldItem5
         type={"element"}
         element={"star"}
