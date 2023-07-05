@@ -4,6 +4,8 @@ import { Sprite, Stage } from "@pixi/react";
 import FieldItem from "./FieldItem";
 import FieldItem3 from "./FieldItem3";
 import FieldItem4 from "./FieldItem4";
+import FieldItem5 from "./FieldItem5";
+import FieldItem6 from "./FieldItem6";
 
 export type Color = "red" | "blue";
 
@@ -46,14 +48,21 @@ const PixiCanvas = () => {
       {/* <FieldItem position={succesStartPosition} /> */}
       {/* <Ball position={succesStartPosition} number={"2"} color={"blue"} /> */}
       {team.map((o, index) => (
-        <FieldItem4
+        <FieldItem5
           key={index}
+          type={"player"}
           number={o.number}
           position={o.position}
           color={o.color}
         />
       ))}
-      <FieldItem4 position={ballStartPosition} />
+      {/* <FieldItem4 position={succesStartPosition} /> */}
+      <FieldItem6 position={succesStartPosition} />
+      <FieldItem5
+        type={"element"}
+        element={"star"}
+        position={ballStartPosition}
+      />
     </Stage>
   );
 };
