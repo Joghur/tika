@@ -20,9 +20,9 @@ type BallProps = {
 } & (BallOrStar | Player);
 
 /**
- * This is the functioning prototype right now
+ * This is the the main test prototype
  */
-const FieldItem5: React.FC<BallProps> = (props) => {
+const FieldItem7: React.FC<BallProps> = (props) => {
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<any>(null);
   const objectPosition = useRef(props.position);
@@ -159,4 +159,4 @@ const FieldItem5: React.FC<BallProps> = (props) => {
   );
 };
 
-export default FieldItem5;
+export default FieldItem7;
