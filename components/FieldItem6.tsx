@@ -9,6 +9,10 @@ interface BallProps {
   color?: Color;
 }
 
+/**
+ * Touch doesnt work
+ */
+
 const FieldItem6: React.FC<BallProps> = ({ position, number, color }) => {
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<any>(null);

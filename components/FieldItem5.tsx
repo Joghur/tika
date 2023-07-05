@@ -19,6 +19,10 @@ type BallProps = {
   position: { x: number; y: number };
 } & (BallOrStar | Player);
 
+
+/**
+ * This is the functioning prototype right now
+ */
 const FieldItem5: React.FC<BallProps> = (props) => {
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<any>(null);
