@@ -19,7 +19,6 @@ type BallProps = {
   position: { x: number; y: number };
 } & (BallOrStar | Player);
 
-
 /**
  * This is the functioning prototype right now
  */
@@ -115,16 +114,16 @@ const FieldItem5: React.FC<BallProps> = (props) => {
       pointerover={handlePointerOver}
       touchstart={handleTouchStart}
       eventMode="dynamic">
+      <Graphics
+        // visible={false}
+        draw={(g) => {
+          g.beginFill(0xffffff, 0.01);
+          g.drawCircle(0, 0, 25);
+          g.endFill();
+        }}
+      />
       {isPlayer && (
         <>
-          <Graphics
-            visible={false}
-            draw={(g) => {
-              g.beginFill(0x000000);
-              g.drawCircle(0, 0, 45);
-              g.endFill();
-            }}
-          />
           <Graphics
             draw={(g) => {
               const offset = 2;
@@ -149,21 +148,11 @@ const FieldItem5: React.FC<BallProps> = (props) => {
         </>
       )}
       {!isPlayer && (
-        <>
-          <Graphics
-            visible={false}
-            draw={(g) => {
-              g.beginFill(0x000000, 0.3);
-              g.drawCircle(0, 0, 45);
-              g.endFill();
-            }}
-          />
-          <Sprite
-            anchor={[0.5, 0.5]}
-            position={[0, 0]}
-            image={props.element === "ball" ? "ball.png" : "star.png"}
-          />
-        </>
+        <Sprite
+          anchor={[0.5, 0.5]}
+          position={[0, 0]}
+          image={props.element === "ball" ? "ball.png" : "star.png"}
+        />
       )}
     </Container>
   );

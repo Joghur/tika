@@ -20,20 +20,64 @@ export interface Team {
   color: Color;
 }
 
-const redStartIndex = 200;
-const blueStartIndex = 300;
+const redStartYIndex = 200;
+const redStartXIndex = 10;
+const redAccIndex = 60;
+const blueStartYIndex = 300;
+const blueStartXIndex = 10;
+const blueAccIndex = 60;
 
 const team: Team[] = [
-  { number: "1", position: { x: 10, y: redStartIndex }, color: "blue" },
-  { number: "2", position: { x: 40, y: redStartIndex }, color: "blue" },
-  { number: "3", position: { x: 70, y: redStartIndex }, color: "blue" },
-  { number: "4", position: { x: 100, y: redStartIndex }, color: "blue" },
-  { number: "5", position: { x: 130, y: redStartIndex }, color: "blue" },
-  { number: "1", position: { x: 10, y: blueStartIndex }, color: "red" },
-  { number: "2", position: { x: 40, y: blueStartIndex }, color: "red" },
-  { number: "3", position: { x: 70, y: blueStartIndex }, color: "red" },
-  { number: "4", position: { x: 100, y: blueStartIndex }, color: "red" },
-  { number: "5", position: { x: 130, y: blueStartIndex }, color: "red" },
+  {
+    number: "1",
+    position: { x: blueStartXIndex, y: redStartYIndex },
+    color: "blue",
+  },
+  {
+    number: "2",
+    position: { x: blueStartXIndex + blueAccIndex, y: redStartYIndex },
+    color: "blue",
+  },
+  {
+    number: "3",
+    position: { x: blueStartXIndex + 2 * blueAccIndex, y: redStartYIndex },
+    color: "blue",
+  },
+  {
+    number: "4",
+    position: { x: blueStartXIndex + 3 * blueAccIndex, y: redStartYIndex },
+    color: "blue",
+  },
+  {
+    number: "5",
+    position: { x: blueStartXIndex + 4 * blueAccIndex, y: redStartYIndex },
+    color: "blue",
+  },
+  {
+    number: "1",
+    position: { x: redStartXIndex, y: blueStartYIndex },
+    color: "red",
+  },
+  {
+    number: "2",
+    position: { x: redStartXIndex + redAccIndex, y: blueStartYIndex },
+    color: "red",
+  },
+  {
+    number: "3",
+    position: { x: redStartXIndex + 2 * redAccIndex, y: blueStartYIndex },
+    color: "red",
+  },
+  {
+    number: "4",
+    position: { x: redStartXIndex + 3 * redAccIndex, y: blueStartYIndex },
+    color: "red",
+  },
+  {
+    number: "5",
+    position: { x: redStartXIndex + 4 * redAccIndex, y: blueStartYIndex },
+    color: "red",
+  },
 ];
 
 const ballStartPosition: Position = { x: 40, y: 60 };
