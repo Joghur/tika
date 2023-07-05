@@ -1,5 +1,5 @@
 import { Container, Graphics, Sprite, Text, useTick } from "@pixi/react";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Color } from "./PixiCanvas";
 import { TextStyle } from "pixi.js";
 
@@ -77,6 +77,14 @@ const FieldItem5: React.FC<BallProps> = (props) => {
     handlePointerUp();
   };
 
+  useEffect(() => {
+    window.addEventListener("touchmove", handleTouchMove);
+    window.addEventListener("touchend", handleTouchEnd);
+    return () => {
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, []);
 
   useTick(() => {
     if (containerRef.current && isDragging) {
