@@ -1,7 +1,9 @@
-import { Container, Graphics, Sprite, Text, useTick } from "@pixi/react";
-import React, { useEffect, useRef, useState } from "react";
-import { Color } from "./PixiCanvas";
 import { TextStyle } from "pixi.js";
+import React, { useEffect, useRef, useState } from "react";
+
+import { Container, Graphics, Sprite, Text, useTick } from "@pixi/react";
+
+import { Color } from "./PixiCanvas";
 
 type BallOrStar = {
   type: "element";
@@ -17,6 +19,7 @@ type Player = {
 type BallProps = {
   type: "element" | "player";
   position: { x: number; y: number };
+  editable: boolean;
 } & (BallOrStar | Player);
 
 /**
@@ -43,11 +46,11 @@ const FieldItem7: React.FC<BallProps> = (props) => {
   // };
   const handlePointerDown = (e: any) => {
     e.stopPropagation();
-    setIsDragging(true);
+    setIsDragging(() => props.editable);
   };
 
   const handlePointerUp = () => {
-    setIsDragging(false);
+    setIsDragging(() => false);
   };
 
   const handlePointerMove = (e: any) => {
@@ -59,7 +62,7 @@ const FieldItem7: React.FC<BallProps> = (props) => {
 
   const handlePointerOver = () => {
     if (isDragging) {
-      setIsDragging(false);
+      setIsDragging(() => false);
     }
   };
 
