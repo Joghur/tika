@@ -43,11 +43,6 @@ const Stadium = () => {
               <p>Distance%: {distancePercent}</p>
             </div>
           )}
-          {distancePercent && (
-            <div>
-              <p>%: {distancePercent}</p>
-            </div>
-          )}
         </div>
         <div className="flex-grow">
           <div className="mx-auto max-w-screen-lg">
