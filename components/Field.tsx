@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import {
-    adjustCoords, calculatePercentageDistance, calculatePixelDistance, percentCoords
+    adjustCoords, calculatePercentageDistance, calculatePixelDistance
 } from '@/utils/coordinates';
 import { Sprite, Stage } from '@pixi/react';
 
@@ -125,7 +125,11 @@ const team: Team[] = [
 
 interface Props {
   editable: boolean;
-  handleDistance: (distance: number, distancePercent: number) => void;
+  handleDistance: (
+    distance: number,
+    distancePercent: number,
+    text: string
+  ) => void;
 }
 
 const ballStartPosition: Position = { x: 40, y: 60 };
@@ -166,27 +170,43 @@ const Field = ({ editable, handleDistance }: Props) => {
   // TODO: handle any. Issues with TouchEventHandler not including clientX/Y
   const handleStagePointerDown = (e: any) => {
     if (field) {
-      const clickedPosition = adjustCoords(e.clientX, e.clientY, field);
-      setPosition(() => clickedPosition);
-      handleDistance(
-        Math.round(
-          calculatePixelDistance(
-            clickedPosition.x,
-            clickedPosition.y,
-            succesStartPosition.x,
-            succesStartPosition.y
-          )
-        ),
-        Math.round(
-          calculatePercentageDistance(
-            clickedPosition.x,
-            clickedPosition.y,
-            succesStartPosition.x,
-            succesStartPosition.y,
-            field
-          )
-        )
-      );
+      console.log("e.type", e.type);
+      let x, y;
+
+      if (e.type === "touchstart") {
+        // Handle touch e
+        const touch = e.touches[0];
+        x = touch.clientX;
+        y = touch.clientY;
+      } else if (e.type === "click") {
+        // Handle click e (desktop)
+        x = e.clientX;
+        y = e.clientY;
+      }
+      if (x && y) {
+        const clickedPosition = adjustCoords(x, y, field);
+        setPosition(() => clickedPosition);
+        handleDistance(
+          Math.round(
+            calculatePixelDistance(
+              clickedPosition.x,
+              clickedPosition.y,
+              succesStartPosition.x,
+              succesStartPosition.y
+            )
+          ),
+          Math.round(
+            calculatePercentageDistance(
+              clickedPosition.x,
+              clickedPosition.y,
+              succesStartPosition.x,
+              succesStartPosition.y,
+              field
+            )
+          ),
+          e.type
+        );
+      }
     }
   };
 
