@@ -1,112 +1,114 @@
-import { Container, Graphics, Sprite, Text, useTick } from "@pixi/react";
-import React, { useRef, useState } from "react";
-import { Color } from "./PixiCanvas";
-import { TextStyle } from "pixi.js";
+// import { TextStyle } from 'pixi.js';
+// import React, { useRef, useState } from 'react';
 
-interface BallProps {
-  position: { x: number; y: number };
-  number?: string;
-  color?: Color;
-}
+// import { Container, Graphics, Sprite, Text, useTick } from '@pixi/react';
 
-const FieldItem4: React.FC<BallProps> = ({ position, number, color }) => {
-  const [isDragging, setIsDragging] = useState(false);
-  const containerRef = useRef<any>(null);
-  const objectPosition = useRef(position);
+// import { Color } from '../Field';
 
-  const handlePointerDown = () => {
-    setIsDragging(true);
-  };
+// interface BallProps {
+//   position: { x: number; y: number };
+//   number?: string;
+//   color?: Color;
+// }
 
-  const handlePointerUp = () => {
-    setIsDragging(false);
-  };
+// const FieldItem4: React.FC<BallProps> = ({ position, number, color }) => {
+//   const [isDragging, setIsDragging] = useState(false);
+//   const containerRef = useRef<any>(null);
+//   const objectPosition = useRef(position);
 
-  const handlePointerMove = (e: any) => {
-    if (isDragging && containerRef.current) {
-      const newPosition = e.data.getLocalPosition(containerRef.current.parent);
-      containerRef.current.position.set(newPosition.x, newPosition.y);
-    }
-  };
+//   const handlePointerDown = () => {
+//     setIsDragging(true);
+//   };
 
-  const handlePointerOver = () => {
-    if (isDragging) {
-      setIsDragging(false);
-    }
-  };
+//   const handlePointerUp = () => {
+//     setIsDragging(false);
+//   };
 
-  useTick(() => {
-    if (containerRef.current && isDragging) {
-      objectPosition.current = containerRef.current.position;
-    }
-  });
+//   const handlePointerMove = (e: any) => {
+//     if (isDragging && containerRef.current) {
+//       const newPosition = e.data.getLocalPosition(containerRef.current.parent);
+//       containerRef.current.position.set(newPosition.x, newPosition.y);
+//     }
+//   };
 
-  const textStyle: TextStyle = new TextStyle({
-    fill: "white",
-    fontSize: 12,
-    fontWeight: "bold",
-  });
+//   const handlePointerOver = () => {
+//     if (isDragging) {
+//       setIsDragging(false);
+//     }
+//   };
 
-  const isPlayer = Boolean(number && color);
+//   useTick(() => {
+//     if (containerRef.current && isDragging) {
+//       objectPosition.current = containerRef.current.position;
+//     }
+//   });
 
-  return (
-    <Container
-      ref={containerRef}
-      position={objectPosition.current}
-      pointerdown={handlePointerDown}
-      pointerup={handlePointerUp}
-      pointerupoutside={handlePointerUp}
-      pointermove={handlePointerMove}
-      pointerover={handlePointerOver}
-      eventMode="dynamic">
-      {isPlayer && (
-        <>
-          <Graphics
-            visible={false}
-            draw={(g) => {
-              g.beginFill(0x000000);
-              g.drawCircle(0, 0, 45);
-              g.endFill();
-            }}
-          />
-          <Graphics
-            draw={(g) => {
-              const offset = 2;
-              g.beginFill(0x000000, 0.3);
-              g.drawCircle(offset, offset, 10);
-              g.endFill();
-            }}
-          />
-          <Graphics
-            draw={(g) => {
-              g.beginFill(color === "blue" ? 0x0000ff : 0xff0000);
-              g.drawCircle(0, 0, 10);
-              g.endFill();
-            }}
-          />
-          <Text
-            text={number}
-            style={textStyle}
-            anchor={[0.5, 0.5]}
-            position={[0, 0]}
-          />
-        </>
-      )}
-      {!isPlayer && (
-        <>
-          <Graphics
-            visible={false}
-            draw={(g) => {
-              g.beginFill(0x000000, 0.3);
-              g.drawCircle(0, 0, 45);
-              g.endFill();
-            }}
-          />
-          <Sprite anchor={[0.5, 0.5]} position={[0, 0]} image={"ball.png"} />
-        </>
-      )}
-    </Container>
-  );
-};
+//   const textStyle: TextStyle = new TextStyle({
+//     fill: "white",
+//     fontSize: 12,
+//     fontWeight: "bold",
+//   });
 
-export default FieldItem4;
+//   const isPlayer = Boolean(number && color);
+
+//   return (
+//     <Container
+//       ref={containerRef}
+//       position={objectPosition.current}
+//       pointerdown={handlePointerDown}
+//       pointerup={handlePointerUp}
+//       pointerupoutside={handlePointerUp}
+//       pointermove={handlePointerMove}
+//       pointerover={handlePointerOver}
+//       eventMode="dynamic">
+//       {isPlayer && (
+//         <>
+//           <Graphics
+//             visible={false}
+//             draw={(g) => {
+//               g.beginFill(0x000000);
+//               g.drawCircle(0, 0, 45);
+//               g.endFill();
+//             }}
+//           />
+//           <Graphics
+//             draw={(g) => {
+//               const offset = 2;
+//               g.beginFill(0x000000, 0.3);
+//               g.drawCircle(offset, offset, 10);
+//               g.endFill();
+//             }}
+//           />
+//           <Graphics
+//             draw={(g) => {
+//               g.beginFill(color === "blue" ? 0x0000ff : 0xff0000);
+//               g.drawCircle(0, 0, 10);
+//               g.endFill();
+//             }}
+//           />
+//           <Text
+//             text={number}
+//             style={textStyle}
+//             anchor={[0.5, 0.5]}
+//             position={[0, 0]}
+//           />
+//         </>
+//       )}
+//       {!isPlayer && (
+//         <>
+//           <Graphics
+//             visible={false}
+//             draw={(g) => {
+//               g.beginFill(0x000000, 0.3);
+//               g.drawCircle(0, 0, 45);
+//               g.endFill();
+//             }}
+//           />
+//           <Sprite anchor={[0.5, 0.5]} position={[0, 0]} image={"ball.png"} />
+//         </>
+//       )}
+//     </Container>
+//   );
+// };
+
+// export default FieldItem4;
