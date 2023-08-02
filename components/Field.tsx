@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import {
     adjustCoords, calculatePercentageDistance, calculatePixelDistance
 } from '@/utils/coordinates';
+import { handleDeviceEvent } from '@/utils/events';
 import { Sprite, Stage } from '@pixi/react';
 
 import FieldItem from './FieldItem';
@@ -166,19 +167,8 @@ const Field = ({ editable, handleDistance }: Props) => {
   // TODO: handle any. Issues with TouchEventHandler not including clientX/Y
   const handleStagePointerDown = (e: any) => {
     if (field) {
-      console.log("e.type", e.type);
-      let x, y;
+      const { x, y } = handleDeviceEvent(e);
 
-      if (e.type === "touchstart") {
-        // Handle touch e
-        const touch = e.touches[0];
-        x = touch.clientX;
-        y = touch.clientY;
-      } else if (e.type === "click") {
-        // Handle click e (desktop)
-        x = e.clientX;
-        y = e.clientY;
-      }
       if (x && y) {
         const clickedPosition = adjustCoords(x, y, field);
         setPosition(() => clickedPosition);

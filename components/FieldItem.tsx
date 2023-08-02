@@ -1,6 +1,7 @@
 import { TextStyle } from 'pixi.js';
 import React, { useEffect, useRef, useState } from 'react';
 
+import { handleDeviceEvent } from '@/utils/events';
 import { Container, Graphics, Sprite, Text, useTick } from '@pixi/react';
 
 import { Color } from './Field';
@@ -22,9 +23,6 @@ type BallProps = {
   editable: boolean;
 } & (BallOrStar | Player);
 
-/**
- * This is the the main test prototype
- */
 const FieldItem: React.FC<BallProps> = (props) => {
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<any>(null);
@@ -35,15 +33,15 @@ const FieldItem: React.FC<BallProps> = (props) => {
     e: MouseEvent | Touch
   ): { x: number; y: number } => {
     const rect = containerRef.current.getBoundingClientRect();
+    console.log("asgælkjadælk");
+    const { x, y } = handleDeviceEvent(e);
+
     return {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
+      x: x - rect.left,
+      y: y - rect.top,
     };
   };
 
-  // const handlePointerDown = () => {
-  //   setIsDragging(true);
-  // };
   const handlePointerDown = (e: any) => {
     e.stopPropagation();
     setIsDragging(() => props.editable);

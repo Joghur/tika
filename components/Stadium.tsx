@@ -17,11 +17,7 @@ const Stadium = () => {
     setEditable((oldState) => !oldState);
   };
 
-  const handleDistance = (
-    distance: number,
-    distancePercent: number,
-    text: string
-  ) => {
+  const handleDistance = (distance: number, distancePercent: number) => {
     setDistance(() => distance);
     setDistancePercent(() => distancePercent);
   };
