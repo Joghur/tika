@@ -131,7 +131,7 @@ interface Props {
 const ballStartPosition: Position = { x: 40, y: 60 };
 const succesStartPosition: Position = { x: 100, y: 60 };
 
-// TODO exchange with width of device if mobile and maxsize if desktop
+// TODO exchange with width of device if mobile and maxsize if desktop2
 const fieldSize: any = { width: 389, height: 802 };
 
 const Field = ({ editable, handleDistance }: Props) => {
