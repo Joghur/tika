@@ -1,9 +1,11 @@
 "use client";
 
-import { Sprite, useTick } from "@pixi/react";
 import * as PIXI from "pixi.js";
 import { useEffect, useRef, useState } from "react";
-import { Position } from "./PixiCanvas";
+
+import { Sprite, useTick } from "@pixi/react";
+
+import { Position } from "./Field";
 
 const defaultPosition: Position = { x: 0, y: 0 };
 

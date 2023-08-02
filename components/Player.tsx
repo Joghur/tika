@@ -1,9 +1,11 @@
 "use client";
 
-import { Container, Graphics, Text, useTick } from "@pixi/react";
 import * as PIXI from "pixi.js";
 import { Fragment, useEffect, useRef, useState } from "react";
-import { Team } from "./PixiCanvas";
+
+import { Container, Graphics, Text, useTick } from "@pixi/react";
+
+import { Team } from "./Field";
 
 interface Props extends Team {}
 

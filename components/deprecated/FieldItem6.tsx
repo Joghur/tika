@@ -1,7 +1,9 @@
-import { Container, Graphics, Sprite, Text, useTick } from "@pixi/react";
-import React, { useRef, useState, useEffect } from "react";
-import { Color } from "./PixiCanvas";
 import { TextStyle } from "pixi.js";
+import React, { useEffect, useRef, useState } from "react";
+
+import { Container, Graphics, Sprite, Text, useTick } from "@pixi/react";
+
+import { Color } from "../Field";
 
 interface BallProps {
   position: { x: number; y: number };

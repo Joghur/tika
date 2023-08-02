@@ -1,7 +1,9 @@
-import { Container, Graphics, Sprite, Text, useTick } from "@pixi/react";
 import * as PIXI from "pixi.js";
 import { useRef, useState } from "react";
-import { Color, Position } from "./PixiCanvas";
+
+import { Container, Graphics, Sprite, Text, useTick } from "@pixi/react";
+
+import { Color, Position } from "../Field";
 
 interface Props {
   position: Position;

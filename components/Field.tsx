@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-import { Role } from '@/app/page';
+import {
+    adjustCoords, calculatePercentageDistance, calculatePixelDistance, percentCoords
+} from '@/utils/coordinates';
 import { Sprite, Stage } from '@pixi/react';
 
-import FieldItem5 from './FieldItem5';
-import FieldItem7 from './FieldItem7';
+import FieldItem from './FieldItem';
 
 export type Color = "red" | "blue";
 
@@ -122,23 +123,30 @@ const team: Team[] = [
   },
 ];
 
+interface Props {
+  editable: boolean;
+  handleDistance: (distance: number, distancePercent: number) => void;
+}
+
 const ballStartPosition: Position = { x: 40, y: 60 };
 const succesStartPosition: Position = { x: 100, y: 60 };
 
-interface Props {
-  role: Role;
-}
+// TODO exchange with width of device if mobile and maxsize if desktop
+const fieldSize: any = { width: 389, height: 802 };
 
-const PixiCanvas = ({ role }: Props) => {
-  // const [step, setStep] = useState(0);
+const Field = ({ editable, handleDistance }: Props) => {
   const [position, setPosition] = useState<Position | null>(null);
-  const [editable, setEditable] = useState(
-    role === "admin" || role === "editor"
-  );
+  const fieldRef = useRef<HTMLDivElement | null>(null);
+  const [field, setField] = useState<DOMRect | null>(null);
 
-  const handleToggleEdit = () => {
-    setEditable((oldState) => !oldState);
-  };
+  useEffect(() => {
+    if (fieldRef.current) {
+      const rect = fieldRef.current.getBoundingClientRect();
+      console.log("Coordinates (left, top):", rect.left, rect.top);
+      console.log("Dimensions (h,w):", rect.height, rect.width);
+      setField(rect);
+    }
+  }, []);
 
   const handleClick = (e: any) => {
     const { x, y } = e.data.global;
@@ -155,84 +163,76 @@ const PixiCanvas = ({ role }: Props) => {
     console.log("Pointer over Sprite:", x, y);
   };
 
-  // const handleToggleStep = () => {
-  //   setStep((prevStep) => (prevStep === 0 ? 1 : 0));
-  // };
-
+  // TODO: handle any. Issues with TouchEventHandler not including clientX/Y
   const handleStagePointerDown = (e: any) => {
-    setPosition(() => ({ x: e.clientX, y: e.clientY }));
+    if (field) {
+      const clickedPosition = adjustCoords(e.clientX, e.clientY, field);
+      setPosition(() => clickedPosition);
+      handleDistance(
+        Math.round(
+          calculatePixelDistance(
+            clickedPosition.x,
+            clickedPosition.y,
+            succesStartPosition.x,
+            succesStartPosition.y
+          )
+        ),
+        Math.round(
+          calculatePercentageDistance(
+            clickedPosition.x,
+            clickedPosition.y,
+            succesStartPosition.x,
+            succesStartPosition.y,
+            field
+          )
+        )
+      );
+    }
   };
 
-  console.log("position", position);
-
   return (
-    <div className="flex flex-col justify-center items-center overflow-y-auto h-screen mx-4 relative">
-      <div className="m-4 flex justify-center items-center gap-4">
-        <button
-          className="button ring-2 p-2 shadow-sm"
-          onClick={handleToggleEdit}>
-          {editable ? "Editor" : "User"}
-        </button>
-        {/* <button
-          className="button ring-2 p-2 shadow-sm"
-          onClick={handleToggleStep}>
-          {step === 0 ? "Goto Step 2" : "Goto Step 1"}
-        </button>
-        <p>Step {step + 1}</p> */}
-      </div>
-      <div className="flex flex-col sm:flex-row gap-2">
-        <Stage
-          width={389}
-          height={802}
-          onTouchStart={handleStagePointerDown}
-          onClick={handleStagePointerDown}>
-          <Sprite
-            touchstart={handleTouchStart}
-            pointerdown={handleClick}
-            pointerover={handlePointerOver}
-            image={"field.png"}
+    <div ref={fieldRef}>
+      <Stage
+        width={fieldSize.width}
+        height={fieldSize.height}
+        onTouchStart={handleStagePointerDown}
+        onClick={handleStagePointerDown}>
+        <Sprite
+          touchstart={handleTouchStart}
+          pointerdown={handleClick}
+          pointerover={handlePointerOver}
+          image={"field.png"}
+        />
+        {team.map((o, index) => (
+          <FieldItem
+            key={index}
+            type={"player"}
+            number={o.number}
+            position={o.position}
+            color={o.color}
+            editable={editable}
           />
-          {/* <ObjectMovement
-          step={toggle}
-          startPosition={{ x: 140, y: 100 }}
-          endPosition={{ x: 300, y: 300 }}
-        /> */}
-          {/* <FieldItems position={ballStartPosition} /> */}
-          {/* <BallOrSuccess position={succesStartPosition} /> */}
-          {/* <FieldItem position={succesStartPosition} /> */}
-          {/* <Ball position={succesStartPosition} number={"2"} color={"blue"} /> */}
-          {team.map((o, index) => (
-            <FieldItem7
-              key={index}
-              type={"player"}
-              number={o.number}
-              position={o.position}
-              color={o.color}
-              editable={editable}
-            />
-          ))}
-          {/* <FieldItem4 position={succesStartPosition} /> */}
-          <FieldItem7
+        ))}
+        <FieldItem
+          type={"element"}
+          element={"ball"}
+          position={ballStartPosition}
+          editable={editable}
+        />
+        {editable && (
+          <FieldItem
             type={"element"}
-            element={"ball"}
+            element={"star"}
             position={succesStartPosition}
             editable={editable}
           />
-          {editable && (
-            <FieldItem7
-              type={"element"}
-              element={"star"}
-              position={ballStartPosition}
-              editable={editable}
-            />
-          )}
-        </Stage>
-      </div>
+        )}
+      </Stage>
     </div>
   );
 };
 
-export default PixiCanvas;
+export default Field;
 
 // Ball movements
 {
@@ -267,4 +267,28 @@ export default PixiCanvas;
             step={step}
           />
         </Stage> */
+
+  {
+    /* <ObjectMovement
+          step={toggle}
+          startPosition={{ x: 140, y: 100 }}
+          endPosition={{ x: 300, y: 300 }}
+        /> */
+  }
+  {
+    /* <FieldItems position={ballStartPosition} /> */
+  }
+  {
+    /* <BallOrSuccess position={succesStartPosition} /> */
+  }
+  {
+    /* <FieldItem position={succesStartPosition} /> */
+  }
+  {
+    /* <Ball position={succesStartPosition} number={"2"} color={"blue"} /> */
+  }
+
+  {
+    /* <FieldItem4 position={succesStartPosition} /> */
+  }
 }
