@@ -12,7 +12,6 @@ const Stadium = () => {
   const [editable, setEditable] = useState(true);
   const [distance, setDistance] = useState<number | null>(null);
   const [distancePercent, setDistancePercent] = useState<number | null>(null);
-  const [typeEvent, setTypeEvent] = useState<string | null>(null);
 
   const handleToggleEdit = () => {
     setEditable((oldState) => !oldState);
@@ -25,7 +24,6 @@ const Stadium = () => {
   ) => {
     setDistance(() => distance);
     setDistancePercent(() => distancePercent);
-    setTypeEvent(() => text);
   };
 
   return (
@@ -52,11 +50,6 @@ const Stadium = () => {
           {distancePercent && (
             <div>
               <p>%: {distancePercent}</p>
-            </div>
-          )}
-          {typeEvent && (
-            <div>
-              <p>Event: {typeEvent}</p>
             </div>
           )}
         </div>

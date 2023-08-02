@@ -125,11 +125,7 @@ const team: Team[] = [
 
 interface Props {
   editable: boolean;
-  handleDistance: (
-    distance: number,
-    distancePercent: number,
-    text: string
-  ) => void;
+  handleDistance: (distance: number, distancePercent: number) => void;
 }
 
 const ballStartPosition: Position = { x: 40, y: 60 };
@@ -203,8 +199,7 @@ const Field = ({ editable, handleDistance }: Props) => {
               succesStartPosition.y,
               field
             )
-          ),
-          e.type
+          )
         );
       }
     }
