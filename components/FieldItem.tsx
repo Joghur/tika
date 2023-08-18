@@ -33,7 +33,6 @@ const FieldItem: React.FC<BallProps> = (props) => {
     e: MouseEvent | Touch
   ): { x: number; y: number } => {
     const rect = containerRef.current.getBoundingClientRect();
-    console.log("asgælkjadælk");
     const { x, y } = handleDeviceEvent(e);
 
     return {

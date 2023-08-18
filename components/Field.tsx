@@ -125,6 +125,7 @@ const team: Team[] = [
 ];
 
 interface Props {
+  isAwarded: boolean;
   editable: boolean;
   handleDistance: (distance: number, distancePercent: number) => void;
 }
@@ -132,13 +133,16 @@ interface Props {
 const ballStartPosition: Position = { x: 40, y: 60 };
 const succesStartPosition: Position = { x: 100, y: 60 };
 
-// TODO exchange with width of device if mobile and maxsize if desktop2
+// TODO exchange with width of device if mobile and maxsize if desktop
 const fieldSize: any = { width: 389, height: 802 };
 
-const Field = ({ editable, handleDistance }: Props) => {
+const Field = ({ editable, handleDistance, isAwarded }: Props) => {
   const [position, setPosition] = useState<Position | null>(null);
   const fieldRef = useRef<HTMLDivElement | null>(null);
   const [field, setField] = useState<DOMRect | null>(null);
+  const [starPosition, setStarPosition] = useState<Position | null>(
+    succesStartPosition
+  );
 
   useEffect(() => {
     if (fieldRef.current) {
@@ -224,7 +228,7 @@ const Field = ({ editable, handleDistance }: Props) => {
           position={ballStartPosition}
           editable={editable}
         />
-        {editable && (
+        {(editable || isAwarded) && (
           <FieldItem
             type={"element"}
             element={"star"}

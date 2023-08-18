@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import Field from './Field';
 
@@ -12,6 +12,7 @@ const Stadium = () => {
   const [editable, setEditable] = useState(true);
   const [distance, setDistance] = useState<number | null>(null);
   const [distancePercent, setDistancePercent] = useState<number | null>(null);
+  const [isAwarded, setIsAwarded] = useState(false);
 
   const handleToggleEdit = () => {
     setEditable((oldState) => !oldState);
@@ -19,9 +20,14 @@ const Stadium = () => {
 
   const handleDistance = (distance: number, distancePercent: number) => {
     setDistance(() => distance);
-    setDistancePercent(() => distancePercent);
+    setDistancePercent(() => 100 - distancePercent);
+    if (distancePercent < 11) {
+      setIsAwarded(() => true);
+      setTimeout(() => {
+        setIsAwarded(() => false);
+      }, 3000);
+    }
   };
-
   return (
     <>
       <div className="flex flex-col justify-center items-center min-h-screen">
@@ -40,13 +46,17 @@ const Stadium = () => {
           )}
           {distancePercent && (
             <div>
-              <p>Distance%: {distancePercent}</p>
+              <p>Score: {distancePercent}</p>
             </div>
           )}
         </div>
         <div className="flex-grow">
           <div className="mx-auto max-w-screen-lg">
-            <Field editable={editable} handleDistance={handleDistance} />
+            <Field
+              editable={editable}
+              handleDistance={handleDistance}
+              isAwarded={isAwarded}
+            />
           </div>
         </div>
       </div>
