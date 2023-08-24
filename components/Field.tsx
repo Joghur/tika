@@ -1,14 +1,16 @@
 "use client";
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 
 import {
-    adjustCoords, calculatePercentageDistance, calculatePixelDistance
-} from '@/utils/coordinates';
-import { handleDeviceEvent } from '@/utils/events';
-import { Sprite, Stage } from '@pixi/react';
+  adjustCoords,
+  calculatePercentageDistance,
+  calculatePixelDistance,
+} from "@/utils/coordinates";
+import { handleDeviceEvent } from "@/utils/events";
+import { Sprite, Stage } from "@pixi/react";
 
-import FieldItem from './FieldItem';
+import FieldItem from "./FieldItem";
 
 export type Color = "red" | "blue";
 
@@ -167,6 +169,8 @@ const Field = ({ editable, handleDistance, isAwarded }: Props) => {
     const { x, y } = e.data.global;
     console.log("Pointer over Sprite:", x, y);
   };
+
+  console.log("team", team);
 
   // TODO: handle any. Issues with TouchEventHandler not including clientX/Y
   const handleStagePointerDown = (e: any) => {
