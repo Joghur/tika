@@ -1,5 +1,5 @@
 import { TextStyle } from 'pixi.js';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 
 import { handleDeviceEvent } from '@/utils/events';
 import { Container, Graphics, Sprite, Text, useTick } from '@pixi/react';
@@ -115,7 +115,7 @@ const FieldItem: React.FC<Props> = (props) => {
         }}
       />
       {isPlayer && props.number && (
-        <>
+        <Fragment>
           <Graphics
             draw={(g) => {
               const offset = 2;
@@ -137,7 +137,7 @@ const FieldItem: React.FC<Props> = (props) => {
             anchor={[0.5, 0.5]}
             position={[0, 0]}
           />
-        </>
+        </Fragment>
       )}
       {!isPlayer && (
         <Sprite

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 
 import Field from './Field';
 
@@ -29,7 +29,7 @@ const Stadium = () => {
     }
   };
   return (
-    <>
+    <Fragment>
       <div className="flex flex-col justify-center items-center min-h-screen">
         <div className="flex flex-row justify-center gap-2 items-center p-4">
           <div>
@@ -60,7 +60,7 @@ const Stadium = () => {
           </div>
         </div>
       </div>
-    </>
+    </Fragment>
   );
 };
 
