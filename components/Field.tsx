@@ -1,16 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
 import {
-  adjustCoords,
-  calculatePercentageDistance,
-  calculatePixelDistance,
-} from "@/utils/coordinates";
-import { handleDeviceEvent } from "@/utils/events";
-import { Sprite, Stage } from "@pixi/react";
+    adjustCoords, calculatePercentageDistance, calculatePixelDistance
+} from '@/utils/coordinates';
+import { handleDeviceEvent } from '@/utils/events';
+import { Sprite, Stage } from '@pixi/react';
 
-import FieldItem from "./FieldItem";
+import FieldItem from './FieldItem';
 
 export type Color = "red" | "blue";
 
@@ -147,6 +145,7 @@ const Field = ({ editable, handleDistance, isAwarded }: Props) => {
   );
 
   useEffect(() => {
+
     if (fieldRef.current) {
       const rect = fieldRef.current.getBoundingClientRect();
       console.log("Coordinates (left, top):", rect.left, rect.top);
