@@ -1,5 +1,13 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Initializing
+
+Using mongodb an URL is needed to connect to it. Get it from you mondodb configuration page.
+Make or update .env file:
+
+    DATABASE_URL="mongodb+srv://<TABLE>:<PASSWORD>/tika?retryWrites=true&w=majority"
+
+
 ## Getting Started
 
 First, run the development server:

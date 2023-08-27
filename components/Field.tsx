@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from 'react';
+import { cache, use, useEffect, useRef, useState } from 'react';
 
 import {
     adjustCoords, calculatePercentageDistance, calculatePixelDistance
@@ -10,119 +10,28 @@ import { Sprite, Stage } from '@pixi/react';
 
 import FieldItem from './FieldItem';
 
-export type Color = "red" | "blue";
+// TODO exchange with width of device if mobile and maxsize if desktop
+const fieldSize: any = { width: 389, height: 802 };
 
-export interface Position {
-  x: number;
-  y: number;
-}
-
-export interface Team {
+export interface FieldItemType {
+  type: string;
+  step: number;
   number: string;
-  position: Position;
-  slutPosition: Position;
-  color: Color;
+  positionX: number;
+  positionY: number;
+  color: string;
 }
 
-const redStartYIndex = 200;
-const redStartXIndex = 10;
-const redAccIndex = 60;
-const blueStartYIndex = 300;
-const blueStartXIndex = 10;
-const blueAccIndex = 60;
+const getTemplate = cache(async () => {
+  const res = await fetch("http://localhost:3000/api/fieldItems/template");
 
-const team: Team[] = [
-  {
-    number: "1",
-    position: { x: blueStartXIndex, y: redStartYIndex },
-    slutPosition: {
-      x: blueStartXIndex + Math.floor(Math.random() * 201) - 100,
-      y: redStartYIndex + Math.floor(Math.random() * 201) - 100,
-    },
-    color: "blue",
-  },
-  {
-    number: "2",
-    position: { x: blueStartXIndex + blueAccIndex, y: redStartYIndex },
-    slutPosition: {
-      x: blueStartXIndex + Math.floor(Math.random() * 201) - 100,
-      y: redStartYIndex + Math.floor(Math.random() * 201) - 100,
-    },
-    color: "blue",
-  },
-  {
-    number: "3",
-    position: { x: blueStartXIndex + 2 * blueAccIndex, y: redStartYIndex },
-    slutPosition: {
-      x: blueStartXIndex + Math.floor(Math.random() * 201) - 100,
-      y: redStartYIndex + Math.floor(Math.random() * 201) - 100,
-    },
-    color: "blue",
-  },
-  {
-    number: "4",
-    position: { x: blueStartXIndex + 3 * blueAccIndex, y: redStartYIndex },
-    slutPosition: {
-      x: blueStartXIndex + Math.floor(Math.random() * 201) - 100,
-      y: redStartYIndex + Math.floor(Math.random() * 201) - 100,
-    },
-    color: "blue",
-  },
-  {
-    number: "5",
-    position: { x: blueStartXIndex + 4 * blueAccIndex, y: redStartYIndex },
-    slutPosition: {
-      x: blueStartXIndex + Math.floor(Math.random() * 201) - 100,
-      y: redStartYIndex + Math.floor(Math.random() * 201) - 100,
-    },
-    color: "blue",
-  },
-  {
-    number: "1",
-    position: { x: redStartXIndex, y: blueStartYIndex },
-    slutPosition: {
-      x: blueStartXIndex + Math.floor(Math.random() * 201) - 100,
-      y: redStartYIndex + Math.floor(Math.random() * 201) - 100,
-    },
-    color: "red",
-  },
-  {
-    number: "2",
-    position: { x: redStartXIndex + redAccIndex, y: blueStartYIndex },
-    slutPosition: {
-      x: blueStartXIndex + Math.floor(Math.random() * 201) - 100,
-      y: redStartYIndex + Math.floor(Math.random() * 201) - 100,
-    },
-    color: "red",
-  },
-  {
-    number: "3",
-    position: { x: redStartXIndex + 2 * redAccIndex, y: blueStartYIndex },
-    slutPosition: {
-      x: blueStartXIndex + Math.floor(Math.random() * 201) - 100,
-      y: redStartYIndex + Math.floor(Math.random() * 201) - 100,
-    },
-    color: "red",
-  },
-  {
-    number: "4",
-    position: { x: redStartXIndex + 3 * redAccIndex, y: blueStartYIndex },
-    slutPosition: {
-      x: blueStartXIndex + Math.floor(Math.random() * 201) - 100,
-      y: redStartYIndex + Math.floor(Math.random() * 201) - 100,
-    },
-    color: "red",
-  },
-  {
-    number: "5",
-    position: { x: redStartXIndex + 4 * redAccIndex, y: blueStartYIndex },
-    slutPosition: {
-      x: blueStartXIndex + Math.floor(Math.random() * 201) - 100,
-      y: redStartYIndex + Math.floor(Math.random() * 201) - 100,
-    },
-    color: "red",
-  },
-];
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error("Failed to fetch data");
+  }
+
+  return res.json();
+});
 
 interface Props {
   isAwarded: boolean;
@@ -130,22 +39,18 @@ interface Props {
   handleDistance: (distance: number, distancePercent: number) => void;
 }
 
-const ballStartPosition: Position = { x: 40, y: 60 };
-const succesStartPosition: Position = { x: 100, y: 60 };
-
-// TODO exchange with width of device if mobile and maxsize if desktop
-const fieldSize: any = { width: 389, height: 802 };
-
 const Field = ({ editable, handleDistance, isAwarded }: Props) => {
-  const [position, setPosition] = useState<Position | null>(null);
+  let team = use<FieldItemType[]>(getTemplate());
+  console.log("team", team);
+
+  // const [position, setPosition] = useState<Position | null>(null);
   const fieldRef = useRef<HTMLDivElement | null>(null);
   const [field, setField] = useState<DOMRect | null>(null);
-  const [starPosition, setStarPosition] = useState<Position | null>(
-    succesStartPosition
-  );
+  // const [starPosition, setStarPosition] = useState<Position | null>(
+  //   succesStartPosition
+  // );
 
   useEffect(() => {
-
     if (fieldRef.current) {
       const rect = fieldRef.current.getBoundingClientRect();
       console.log("Coordinates (left, top):", rect.left, rect.top);
@@ -169,16 +74,16 @@ const Field = ({ editable, handleDistance, isAwarded }: Props) => {
     console.log("Pointer over Sprite:", x, y);
   };
 
-  console.log("team", team);
-
   // TODO: handle any. Issues with TouchEventHandler not including clientX/Y
   const handleStagePointerDown = (e: any) => {
+    const succesStartPosition: any = { x: 100, y: 60 };
+
     if (field) {
       const { x, y } = handleDeviceEvent(e);
 
       if (x && y) {
         const clickedPosition = adjustCoords(x, y, field);
-        setPosition(() => clickedPosition);
+        // setPosition(() => clickedPosition);
         handleDistance(
           Math.round(
             calculatePixelDistance(
@@ -215,17 +120,55 @@ const Field = ({ editable, handleDistance, isAwarded }: Props) => {
           pointerover={handlePointerOver}
           image={"field.png"}
         />
-        {team.map((o, index) => (
-          <FieldItem
-            key={index}
-            type={"player"}
-            number={o.number}
-            position={o.position}
-            color={o.color}
-            editable={editable}
-          />
-        ))}
-        <FieldItem
+        {team.map((o, index) => {
+          switch (o.type) {
+            case "player":
+              return (
+                <FieldItem
+                  key={index}
+                  type={o.type}
+                  number={o.number}
+                  positionX={o.positionX}
+                  positionY={o.positionY}
+                  color={o.color}
+                  editable={editable}
+                />
+              );
+
+            case "ball":
+              return (
+                <FieldItem
+                  key={index}
+                  type={o.type}
+                  number={o.number}
+                  positionX={o.positionX}
+                  positionY={o.positionY}
+                  color={o.color}
+                  editable={editable}
+                />
+              );
+
+            case "star":
+              return (
+                (editable || isAwarded) && (
+                  <FieldItem
+                    key={index}
+                    type={o.type}
+                    number={o.number}
+                    positionX={o.positionX}
+                    positionY={o.positionY}
+                    color={o.color}
+                    editable={editable}
+                  />
+                )
+              );
+
+            default:
+              break;
+          }
+        })}
+
+        {/*<FieldItem
           type={"element"}
           element={"ball"}
           position={ballStartPosition}
@@ -238,7 +181,7 @@ const Field = ({ editable, handleDistance, isAwarded }: Props) => {
             position={succesStartPosition}
             editable={editable}
           />
-        )}
+        )} */}
       </Stage>
     </div>
   );

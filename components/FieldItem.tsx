@@ -4,29 +4,20 @@ import React, { useEffect, useRef, useState } from 'react';
 import { handleDeviceEvent } from '@/utils/events';
 import { Container, Graphics, Sprite, Text, useTick } from '@pixi/react';
 
-import { Color } from './Field';
-
-type BallOrStar = {
-  type: "element";
-  element: "star" | "ball";
-};
-
-type Player = {
-  type: "player";
-  number: string;
-  color: Color;
-};
-
-type BallProps = {
-  type: "element" | "player";
-  position: { x: number; y: number };
+//TODO change number to playerNumber (DB reset included)
+type Props = {
+  type: string;
+  number?: string | null;
+  color?: string | null;
+  positionX: number;
+  positionY: number;
   editable: boolean;
-} & (BallOrStar | Player);
+};
 
-const FieldItem: React.FC<BallProps> = (props) => {
+const FieldItem: React.FC<Props> = (props) => {
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<any>(null);
-  const objectPosition = useRef(props.position);
+  const objectPosition = useRef({ x: props.positionX, y: props.positionY });
   const lastMousePosition = useRef({ x: 0, y: 0 });
 
   const eToGlobalPosition = (
@@ -123,7 +114,7 @@ const FieldItem: React.FC<BallProps> = (props) => {
           g.endFill();
         }}
       />
-      {isPlayer && (
+      {isPlayer && props.number && (
         <>
           <Graphics
             draw={(g) => {
@@ -152,7 +143,7 @@ const FieldItem: React.FC<BallProps> = (props) => {
         <Sprite
           anchor={[0.5, 0.5]}
           position={[0, 0]}
-          image={props.element === "ball" ? "ball.png" : "star.png"}
+          image={props.type === "ball" ? "ball.png" : "star.png"}
         />
       )}
     </Container>

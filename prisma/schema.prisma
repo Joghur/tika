@@ -17,5 +17,5 @@ model ElementProp {
   number     String?
   positionX  Float
   positionY  Float
-  color      String? // Directly use the color string
+  color      String?
 }

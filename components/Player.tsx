@@ -5,9 +5,9 @@ import { Fragment, useEffect, useRef, useState } from "react";
 
 import { Container, Graphics, Text, useTick } from "@pixi/react";
 
-import { Team } from "./Field";
+import { FieldElement } from "./Field";
 
-interface Props extends Team {}
+interface Props extends FieldElement {}
 
 const Player = ({ number, position, color }: Props) => {
   const objectRef = useRef<PIXI.Text>(null);
