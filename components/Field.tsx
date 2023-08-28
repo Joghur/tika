@@ -32,16 +32,10 @@ interface Props {
 
 const Field = ({ editable, handleDistance, isAwarded }: Props) => {
   const getTemplate = async () => {
-    const requestOptions: any = {
-      headers: { "Content-Type": "application/json" },
-    };
-    const res = await fetch(
-      "http://localhost:3000/api/fieldItems/template",
-      requestOptions
-    );
+    const res = await fetch("http://localhost:3000/api/fieldItems/template");
 
     if (!res.ok) {
-      //TODO Error Boundary
+      //TODO  Error Boundary
       throw new Error("Failed to fetch data");
     }
     setFieldItems(await res.json());
