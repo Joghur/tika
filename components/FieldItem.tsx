@@ -1,10 +1,10 @@
-import { TextStyle } from 'pixi.js';
-import React, { Fragment, useEffect, useRef, useState } from 'react';
+import { TextStyle } from "pixi.js";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 
-import { handleDeviceEvent } from '@/utils/events';
-import { Container, Graphics, Sprite, Text, useTick } from '@pixi/react';
+import { handleDeviceEvent } from "@/utils/events";
+import { Container, Graphics, Sprite, Text, useTick } from "@pixi/react";
 
-import { FieldItemType } from './Stadium';
+import { FieldItemType } from "./Stadium";
 
 //TODO change number to playerNumber (DB reset included)
 type Props = {
@@ -44,8 +44,8 @@ const FieldItem: React.FC<Props> = (props) => {
     setIsDragging(() => false);
     props.handleMovedPosition({
       ...props.fieldItem,
-      positionX: movedPosition.x,
-      positionY: movedPosition.y,
+      positionX: movedPosition ? movedPosition.x : props.fieldItem.positionX,
+      positionY: movedPosition ? movedPosition.y : props.fieldItem.positionY,
     });
   };
 

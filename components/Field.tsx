@@ -1,15 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 
 import {
-    adjustCoords, calculatePercentageDistance, calculatePixelDistance
-} from '@/utils/coordinates';
-import { handleDeviceEvent } from '@/utils/events';
-import { Sprite, Stage } from '@pixi/react';
+  adjustCoords,
+  calculatePercentageDistance,
+  calculatePixelDistance,
+} from "@/utils/coordinates";
+import { handleDeviceEvent } from "@/utils/events";
+import { Sprite, Stage } from "@pixi/react";
 
-import FieldItem from './FieldItem';
-import { FieldItemType } from './Stadium';
+import FieldItem from "./FieldItem";
+import { FieldItemType } from "./Stadium";
 
 // TODO exchange with width of device if mobile and maxsize if desktop
 const fieldSize: any = { width: 389, height: 802 };
@@ -66,7 +68,9 @@ const Field = ({
   const handleStagePointerDown = (e: any) => {
     const succesStartPosition: any = { x: 100, y: 60 };
 
-    if (field) {
+    const foundObject = fieldItems?.find((item) => item.type === "star");
+
+    if (field && foundObject) {
       const { x, y } = handleDeviceEvent(e);
 
       if (x && y) {
@@ -77,16 +81,16 @@ const Field = ({
             calculatePixelDistance(
               clickedPosition.x,
               clickedPosition.y,
-              succesStartPosition.x,
-              succesStartPosition.y
+              foundObject.positionX,
+              foundObject.positionY
             )
           ),
           Math.round(
             calculatePercentageDistance(
               clickedPosition.x,
               clickedPosition.y,
-              succesStartPosition.x,
-              succesStartPosition.y,
+              foundObject.positionX,
+              foundObject.positionY,
               field
             )
           )
