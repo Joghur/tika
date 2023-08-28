@@ -1,16 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
 import {
-  adjustCoords,
-  calculatePercentageDistance,
-  calculatePixelDistance,
-} from "@/utils/coordinates";
-import { handleDeviceEvent } from "@/utils/events";
-import { Sprite, Stage } from "@pixi/react";
+    adjustCoords, calculatePercentageDistance, calculatePixelDistance
+} from '@/utils/coordinates';
+import { handleDeviceEvent } from '@/utils/events';
+import { Sprite, Stage } from '@pixi/react';
 
-import FieldItem from "./FieldItem";
+import FieldItem from './FieldItem';
 
 // TODO exchange with width of device if mobile and maxsize if desktop
 const fieldSize: any = { width: 389, height: 802 };
@@ -32,7 +30,7 @@ interface Props {
 
 const Field = ({ editable, handleDistance, isAwarded }: Props) => {
   const getTemplate = async () => {
-    const res = await fetch("http://localhost:3000/api/fieldItems/template");
+    const res = await fetch("api/fieldItems/template");
 
     if (!res.ok) {
       //TODO  Error Boundary
