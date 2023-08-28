@@ -4,20 +4,23 @@ import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { handleDeviceEvent } from '@/utils/events';
 import { Container, Graphics, Sprite, Text, useTick } from '@pixi/react';
 
+import { FieldItemType } from './Stadium';
+
 //TODO change number to playerNumber (DB reset included)
 type Props = {
-  type: string;
-  number?: string | null;
-  color?: string | null;
-  positionX: number;
-  positionY: number;
+  fieldItem: FieldItemType;
   editable: boolean;
+  handleMovedPosition: (arg0: any) => void;
 };
 
 const FieldItem: React.FC<Props> = (props) => {
   const [isDragging, setIsDragging] = useState(false);
+  const [movedPosition, setMovedPosition] = useState<any>();
   const containerRef = useRef<any>(null);
-  const objectPosition = useRef({ x: props.positionX, y: props.positionY });
+  const objectPosition = useRef({
+    x: props.fieldItem.positionX,
+    y: props.fieldItem.positionY,
+  });
   const lastMousePosition = useRef({ x: 0, y: 0 });
 
   const eToGlobalPosition = (
@@ -39,12 +42,18 @@ const FieldItem: React.FC<Props> = (props) => {
 
   const handlePointerUp = () => {
     setIsDragging(() => false);
+    props.handleMovedPosition({
+      ...props.fieldItem,
+      positionX: movedPosition.x,
+      positionY: movedPosition.y,
+    });
   };
 
   const handlePointerMove = (e: any) => {
     if (isDragging && containerRef.current) {
       const newPosition = e.data.getLocalPosition(containerRef.current.parent);
       containerRef.current.position.set(newPosition.x, newPosition.y);
+      setMovedPosition(() => newPosition);
     }
   };
 
@@ -56,7 +65,6 @@ const FieldItem: React.FC<Props> = (props) => {
 
   const handleTouchStart = (e: TouchEvent) => {
     const touch = e.touches[0];
-    console.log("touch", touch);
     const newPosition = eToGlobalPosition(touch);
     lastMousePosition.current = newPosition;
     handlePointerDown(touch);
@@ -93,7 +101,7 @@ const FieldItem: React.FC<Props> = (props) => {
     fontWeight: "bold",
   });
 
-  const isPlayer = props.type === "player";
+  const isPlayer = props.fieldItem.type === "player";
 
   return (
     <Container
@@ -114,7 +122,7 @@ const FieldItem: React.FC<Props> = (props) => {
           g.endFill();
         }}
       />
-      {isPlayer && props.number && (
+      {isPlayer && props.fieldItem.number && (
         <Fragment>
           <Graphics
             draw={(g) => {
@@ -126,13 +134,15 @@ const FieldItem: React.FC<Props> = (props) => {
           />
           <Graphics
             draw={(g) => {
-              g.beginFill(props.color === "blue" ? 0x0000ff : 0xff0000);
+              g.beginFill(
+                props.fieldItem.color === "blue" ? 0x0000ff : 0xff0000
+              );
               g.drawCircle(0, 0, 10);
               g.endFill();
             }}
           />
           <Text
-            text={props.number}
+            text={props.fieldItem.number}
             style={textStyle}
             anchor={[0.5, 0.5]}
             position={[0, 0]}
@@ -143,7 +153,7 @@ const FieldItem: React.FC<Props> = (props) => {
         <Sprite
           anchor={[0.5, 0.5]}
           position={[0, 0]}
-          image={props.type === "ball" ? "ball.png" : "star.png"}
+          image={props.fieldItem.type === "ball" ? "ball.png" : "star.png"}
         />
       )}
     </Container>
