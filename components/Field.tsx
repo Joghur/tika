@@ -1,14 +1,16 @@
 "use client";
 
-import { cache, use, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 
 import {
-    adjustCoords, calculatePercentageDistance, calculatePixelDistance
-} from '@/utils/coordinates';
-import { handleDeviceEvent } from '@/utils/events';
-import { Sprite, Stage } from '@pixi/react';
+  adjustCoords,
+  calculatePercentageDistance,
+  calculatePixelDistance,
+} from "@/utils/coordinates";
+import { handleDeviceEvent } from "@/utils/events";
+import { Sprite, Stage } from "@pixi/react";
 
-import FieldItem from './FieldItem';
+import FieldItem from "./FieldItem";
 
 // TODO exchange with width of device if mobile and maxsize if desktop
 const fieldSize: any = { width: 389, height: 802 };
@@ -22,17 +24,6 @@ export interface FieldItemType {
   color: string;
 }
 
-const getTemplate = cache(async () => {
-  const res = await fetch("http://localhost:3000/api/fieldItems/template");
-
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error("Failed to fetch data");
-  }
-
-  return res.json();
-});
-
 interface Props {
   isAwarded: boolean;
   editable: boolean;
@@ -40,15 +31,25 @@ interface Props {
 }
 
 const Field = ({ editable, handleDistance, isAwarded }: Props) => {
-  let team = use<FieldItemType[]>(getTemplate());
-  console.log("team", team);
+  const getTemplate = async () => {
+    const res = await fetch("http://localhost:3000/api/fieldItems/template");
+
+    if (!res.ok) {
+      //TODO Error Boundary
+      throw new Error("Failed to fetch data");
+    }
+    setFieldItems(await res.json());
+  };
 
   // const [position, setPosition] = useState<Position | null>(null);
   const fieldRef = useRef<HTMLDivElement | null>(null);
   const [field, setField] = useState<DOMRect | null>(null);
+  const [fieldItems, setFieldItems] = useState<FieldItemType[] | null>(null);
   // const [starPosition, setStarPosition] = useState<Position | null>(
   //   succesStartPosition
   // );
+
+  console.log("fieldItems", fieldItems);
 
   useEffect(() => {
     if (fieldRef.current) {
@@ -57,6 +58,7 @@ const Field = ({ editable, handleDistance, isAwarded }: Props) => {
       console.log("Dimensions (h,w):", rect.height, rect.width);
       setField(rect);
     }
+    getTemplate();
   }, []);
 
   const handleClick = (e: any) => {
@@ -120,7 +122,7 @@ const Field = ({ editable, handleDistance, isAwarded }: Props) => {
           pointerover={handlePointerOver}
           image={"field.png"}
         />
-        {team.map((o, index) => {
+        {fieldItems?.map((o, index) => {
           switch (o.type) {
             case "player":
               return (
