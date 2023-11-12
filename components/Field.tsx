@@ -17,7 +17,7 @@ import { FieldItemType } from "./Stadium";
 const fieldSize: any = { width: 389, height: 802 };
 
 interface Props {
-  fieldItems: FieldItemType[] | null;
+  fieldItems: FieldItemType[] | undefined;
   isAwarded: boolean;
   editable: boolean;
   step: number;
@@ -99,13 +99,18 @@ const Field = ({
     }
   };
 
+  console.log("------------------");
+  console.log("fieldItems 0", fieldItems && fieldItems[0]);
+  console.log("fieldItems 1", fieldItems && fieldItems[1]);
+
   return (
     <div ref={fieldRef}>
       <Stage
         width={fieldSize.width}
         height={fieldSize.height}
         onTouchStart={handleStagePointerDown}
-        onClick={handleStagePointerDown}>
+        onClick={handleStagePointerDown}
+      >
         <Sprite
           touchstart={handleTouchStart}
           pointerdown={handleClick}

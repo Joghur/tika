@@ -12,3 +12,15 @@ export const updateArray = (obj: FieldItemType, array: FieldItemType[]) => {
   }
   return newArr;
 };
+
+export const removeNullProperties = (array: any) => {
+  return array.map((obj: any) => {
+    const newObj = {};
+    for (const key in obj) {
+      if (obj[key] !== null) {
+        newObj[key] = obj[key];
+      }
+    }
+    return newObj;
+  });
+};

@@ -23,6 +23,8 @@ const FieldItem: React.FC<Props> = (props) => {
   });
   const lastMousePosition = useRef({ x: 0, y: 0 });
 
+//   console.log("props.fieldItem", props.fieldItem);
+
   const eToGlobalPosition = (
     e: MouseEvent | Touch
   ): { x: number; y: number } => {
@@ -113,7 +115,8 @@ const FieldItem: React.FC<Props> = (props) => {
       pointermove={handlePointerMove}
       pointerover={handlePointerOver}
       touchstart={handleTouchStart}
-      eventMode="dynamic">
+      eventMode="dynamic"
+    >
       <Graphics
         // visible={false}
         draw={(g) => {

@@ -1,6 +1,7 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
-import { prisma } from '@/lib/prisma';
+import { prisma } from "@/lib/prisma";
+import { removeNullProperties } from "@/utils/arrays";
 
 //TODO protection
 
@@ -11,12 +12,19 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const json = await request.json();
-    const elements = await prisma.elementProp.create({
-      data: json,
-    });
+    const json = removeNullProperties(await request.json());
 
-    return new NextResponse(JSON.stringify(elements), {
+    let array = [];
+    for (const obj of json) {
+      const createdObject = await prisma.elementProp.create({
+        data: obj,
+      });
+
+      console.log("Created object:", createdObject);
+      array.push(obj);
+    }
+
+    return new NextResponse(JSON.stringify(array), {
       status: 201,
       headers: { "Content-Type": "application/json" },
     });
